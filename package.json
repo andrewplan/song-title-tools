@@ -1,0 +1,16 @@
+{
+  "name": "save-song-title",
+  "version": "1.0.0",
+  "description": "",
+  "main": "save_title.js",
+  "scripts": {
+    "start": "node save_title.js"
+  },
+  "author": "Andrew Plan",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  }
+}
