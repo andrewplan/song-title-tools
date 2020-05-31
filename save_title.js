@@ -35,7 +35,7 @@ app.post('/', async (req, res) => {
             name,
             content,
             "assignees": [
-                4316357
+                CLICKUP_ASSIGNEE
             ],
             "status": "Splurge",
             "due_date": dueDate,
