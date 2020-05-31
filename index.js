@@ -1,6 +1,7 @@
 require( 'dotenv' ).config();
 const axios = require( 'axios' );
 const express = require( 'express' );
+const cors = require( 'cors' );
 const bodyParser = require( 'body-parser' );
 const app = express();
 const port = 4000;
@@ -14,7 +15,42 @@ const get7DaysLaterUnix = () => {
 const dueDate = get7DaysLaterUnix();
 
 app.use( bodyParser.json() );
-app.post('/', async (req, res) => {
+app.use( cors() );
+
+app.get( '/', async ( req, res ) => {
+    const {
+        CLICKUP_LIST_ID
+        , CLICKUP_API_KEY
+        , CLICKUP_ASSIGNEE
+    } = process.env;
+
+    const options = {
+        method: 'get'
+        , url: `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`
+        , headers: {
+            "Authorization": CLICKUP_API_KEY
+            , "Content-Type": "application/json"
+        }
+    };
+
+    let result;
+    try {
+        result = await axios(options)
+        result.data.count = result.data.tasks ? 
+            result.data.tasks.length : 0
+        // console.log( result.data );
+        return res.status( 200 ).json( result.data );
+    }
+    catch ( err ) {
+        console.error(err);
+        console.error(`Script failed, see above error. ${err.message}`);
+        return res.status( 400 ).json( {
+            message: err.message
+        } )
+    }
+} )
+
+app.post( '/', async ( req, res ) => {
     const {
         name, content
     } = req.body;
@@ -58,6 +94,6 @@ app.post('/', async (req, res) => {
             message: err.message
         } )
     }
-})
+} )
 
 app.listen( port, () => console.log( `Listening on ${ port }` ) );
