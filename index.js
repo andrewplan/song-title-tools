@@ -88,11 +88,9 @@ app.post( '/', async ( req, res ) => {
         return res.status( 201 ).json( result.data );
     }
     catch ( err ) {
-        console.error(err);
-        console.error(`Script failed, see above error. ${err.message}`);
-        return res.status( 400 ).json( {
-            message: err.message
-        } )
+        console.error(err.response);
+        console.error(`Script failed, see above error. ${err.response.data.err}`);
+        return res.status( 400 ).json( err.response.data )
     }
 } )
 
